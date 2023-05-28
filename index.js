@@ -1,1 +1,1 @@
-console.log("Start of Sports Scheduler");
+console.log('Start of Sports Scheduler')

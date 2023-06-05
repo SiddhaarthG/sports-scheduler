@@ -13,4 +13,12 @@ app.get("/", async (request, response) => {
   response.render("index");
 });
 
+app.get("/signup", (req, res) => {
+  res.render("signup");
+});
+
+app.get("/login", (req, res) => {
+  res.render("login");
+});
+
 module.exports = app;

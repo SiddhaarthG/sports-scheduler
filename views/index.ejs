@@ -4,9 +4,23 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <meta name="csrf-token" content="<%= csrfToken %>" />
+    <link rel="stylesheet" href="./css/styles.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <title><%= title %></title>
 </head>
 <body>
-    Welcome to Home Page
+    <div class="grid grid-cols-6">
+        <div class="col-start-2 col-span-4">
+            <a href="/"><%- include('header.ejs') %></a>
+        </div>
+        <div class="col-start-3 col-span-3">
+            <p class="py-2 text-xl">New here? <a href="/signup" class="text-green-600">Sign-up now</a></p>
+            <p class="py-2 text-xl">Already have an account? <a href="/login" class="text-green-600">Sign-in</a></p>
+        </div>
+    </div>
+    <footer class="fixed inset-x-0 bottom-0">
+        <h1>Built with Node.js</h1>
+    </footer>
 </body>
 </html>

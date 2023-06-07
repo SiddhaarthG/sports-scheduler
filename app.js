@@ -141,7 +141,7 @@ app.post("/users", async (request, response) => {
       if (err) {
         console.log(err);
       }
-      response.redirect("/todo");
+      response.redirect("/home");
     });
   } catch (error) {
     console.log(error);
@@ -174,5 +174,36 @@ app.get("/signout", (request, response, next) => {
     response.redirect("/");
   });
 });
+
+app.get(
+  "/home",
+  connectEnsureLogin.ensureLoggedIn(),
+  async (request, response) => {
+    try {
+      const loggedInUser = request.user.id;
+      const user = await User.getUserDetails(loggedInUser);
+      const name = request.user.name;
+      const role = request.user.role;
+
+      if (request.accepts("html")) {
+        response.render("home", {
+          title: "My Sports Scheduler",
+          name,
+          role,
+          loggedInUser: request.user,
+          csrfToken: request.csrfToken(),
+        });
+      } else {
+        response.json({
+          name,
+          role,
+        });
+      }
+    } catch (error) {
+      console.log(error);
+      return response.status(422).json(error);
+    }
+  }
+);
 
 module.exports = app;

@@ -1,3 +1,4 @@
+/* eslint-disable comma-dangle */
 /* eslint-disable semi */
 /* eslint-disable quotes */
 /* eslint-disable no-unused-vars */
@@ -85,15 +86,24 @@ passport.deserializeUser((id, done) => {
 });
 
 app.get("/", async (request, response) => {
-  response.render("index");
+  if (request.user) {
+    return response.redirect("/home");
+  }
+  return response.render("index", {
+    title: "Sports Scheduler",
+    csrfToken: request.csrfToken(),
+  });
 });
 
-app.get("/signup", (req, res) => {
-  res.render("signup");
+app.get("/signup", (request, response) => {
+  response.render("signup", {
+    title: "Signup",
+    csrfToken: request.csrfToken(),
+  });
 });
 
-app.get("/login", (req, res) => {
-  res.render("login");
+app.get("/login", (request, response) => {
+  response.render("login", { title: "Login", csrfToken: request.csrfToken() });
 });
 
 module.exports = app;

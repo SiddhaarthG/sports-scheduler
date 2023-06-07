@@ -132,10 +132,10 @@ app.post("/users", async (request, response) => {
   console.log(hashedPwd);
   try {
     const user = await User.create({
-      firstName: request.body.firstName,
-      lastName: request.body.lastName,
+      name: request.body.name,
       email: request.body.email,
       password: hashedPwd,
+      role: request.body.role,
     });
     request.login(user, (err) => {
       if (err) {

@@ -102,6 +102,54 @@ app.get("/signup", (request, response) => {
   });
 });
 
+app.post("/users", async (request, response) => {
+  // checking if the username is not of blank spaces
+  const trimmedName = request.body.name.trim();
+  if (trimmedName === "") {
+    request.flash(
+      "error",
+      "Name cannot be Empty and should not contain spaces at beginning or ending"
+    );
+  }
+  if (request.body.email === "") {
+    request.flash("error", "Email cannot be Empty");
+  }
+  const trimmedPassword = request.body.password.trim();
+  if (trimmedPassword.length === 0) {
+    request.flash(
+      "error",
+      "Password cannot be Empty and should not contain spaces at beginning or ending"
+    );
+  }
+  if (
+    trimmedName === "" ||
+    request.body.email === "" ||
+    trimmedPassword.length === 0
+  ) {
+    return response.redirect("/signup");
+  }
+  const hashedPwd = await bcrypt.hash(request.body.password, saltRounds);
+  console.log(hashedPwd);
+  try {
+    const user = await User.create({
+      firstName: request.body.firstName,
+      lastName: request.body.lastName,
+      email: request.body.email,
+      password: hashedPwd,
+    });
+    request.login(user, (err) => {
+      if (err) {
+        console.log(err);
+      }
+      response.redirect("/todo");
+    });
+  } catch (error) {
+    console.log(error);
+    request.flash("error", "User with this mail already exist, try Sign in");
+    return response.redirect("/signup");
+  }
+});
+
 app.get("/login", (request, response) => {
   response.render("login", { title: "Login", csrfToken: request.csrfToken() });
 });
